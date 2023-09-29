@@ -585,7 +585,7 @@ footer {
   }
 }
 
-/* Fix cut text for mobile size screen */
+/* Fix cut text for mobile size screen in hero-section */
 @media screen and (max-width: 460px) {
   .hero-headline {
     font-size: 3.8rem;
