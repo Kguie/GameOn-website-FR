@@ -585,6 +585,42 @@ footer {
   }
 }
 
+/* Error message style */
+.errorMessage {
+  color: #fe142f;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* thanks message  */
+.thanksMessage {
+  display: none;
+  padding: 15px 8%;
+}
+
+.thanksMessage__title {
+  font-size: 20px;
+  text-align: center;
+}
+
+.thanksMessage__lisT {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.thanksMessage__list__element {
+  font-size: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.thanksMessage__list__element__answer {
+  font-weight: 900;
+}
+
+
+
 /* Fix cut text for mobile size screen in hero-section */
 @media screen and (max-width: 460px) {
   .hero-headline {
