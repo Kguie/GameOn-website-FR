@@ -37,11 +37,10 @@ const birthdate = document.getElementById("birthdate");
 const quantity = document.getElementById("quantity");
 const conditionsCheckbox = document.getElementById("checkbox1");
 const subscribeCheckbox = document.getElementById("checkbox2");
-const thanksModal = document.querySelector(".thanksMessage");
 
 //Events
 
-//Launch responsive menu
+//Manage responsive menu
 menuBtn.addEventListener("click", () => {
   editNav();
 });
@@ -144,7 +143,10 @@ function closeModal() {
  * Launch thanks message
  */
 function thanksMessage(formObject) {
+  // Form closing
   form.style.display = "none";
+
+  // Add thanks message
   const message = `<div class="thanksMessage">
    <p class="thanksMessage__title">Merci! Votre réservation bien a été reçue. </p>
    <ul class="thanksMessage__list">
@@ -162,7 +164,7 @@ function thanksMessage(formObject) {
      </li>
      <li class="thanksMessage__list__element">
        <span>Date de naissance:</span>
-       <span class="thanksMessage__list__element__answer">${formObject.birthdate}</span>
+       <span class="thanksMessage__list__element__answer">${formatDate(formObject.birthdate)}</span>
      </li>
      <li class="thanksMessage__list__element">
        <span>Nombre de tournois GameOn:</span>
