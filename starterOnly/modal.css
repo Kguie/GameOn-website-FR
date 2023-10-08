@@ -594,7 +594,8 @@ footer {
 
 /* thanks message  */
 .thanksMessage {
-  display: none;
+  display: flex;
+  flex-direction: column;
   padding: 15px 8%;
 }
 

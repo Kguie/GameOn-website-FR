@@ -46,15 +46,26 @@ export function handleSubmitVerification(element, value, verificationFunction) {
 }
 
 /**
- * Remove all error messages before modal close
+ * Remove all error and thanks message before modal close
  */
-export function resetErrorMessages() {
+export function resetModal() {
     const errors = document.querySelectorAll(".errorMessage");
+    const thanksMessage = document.querySelector(".thanksMessage");
+    const form = document.querySelector("form");
+
+    //Remove error messages
     if (errors.length > 0) {
         errors.forEach((message) => {
             message.parentElement.removeChild(message);
         })
     }
+
+    //Remove thanks message and turn on the form
+    if (thanksMessage) {
+        thanksMessage.parentElement.removeChild(thanksMessage);
+        form.style.display = "block";
+    }
+    form.reset();
 }
 
 /**

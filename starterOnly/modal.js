@@ -5,7 +5,7 @@ import {
   verifyBirthDate,
   verifyIsNumber,
   handleSubmitVerification,
-  resetErrorMessages,
+  resetModal,
   verifyIsLocationChecked,
   verifyIsChecked,
   formatDate,
@@ -123,14 +123,11 @@ form.addEventListener('submit', (e) => {
  * Launch modal
  */
 function launchModal() {
+  modalbg.style.display = "block";
   // Fix scrolling error, form and errors reset
   heroSection.style.overflow = "hidden";
   heroSection.style.position = "fixed";
-  form.style.display = "block";
-  thanksModal.style.display = "none";
-  resetErrorMessages();
-  form.reset();
-  modalbg.style.display = "block";
+  resetModal();
 }
 
 /**
@@ -148,18 +145,39 @@ function closeModal() {
  */
 function thanksMessage(formObject) {
   form.style.display = "none";
-  thanksModal.style.display = "flex";
-  thanksModal.style.flexDirection = "column";
+  const message = `<div class="thanksMessage">
+   <p class="thanksMessage__title">Merci! Votre réservation bien a été reçue. </p>
+   <ul class="thanksMessage__list">
+     <li class="thanksMessage__list__element">
+       <span>Prénom:</span>
+       <span class="thanksMessage__list__element__answer">${formObject.firstName} </span>
+     </li>
+     <li class="thanksMessage__list__element">
+       <span>Nom:</span>
+       <span class="thanksMessage__list__element__answer">${formObject.lastName}</span>
+     </li>
+     <li class="thanksMessage__list__element">
+       <span>E-mail:</span>
+       <span class="thanksMessage__list__element__answer">${formObject.email} </span>
+     </li>
+     <li class="thanksMessage__list__element">
+       <span>Date de naissance:</span>
+       <span class="thanksMessage__list__element__answer">${formObject.birthdate}</span>
+     </li>
+     <li class="thanksMessage__list__element">
+       <span>Nombre de tournois GameOn:</span>
+       <span class="thanksMessage__list__element__answer">${formObject.quantity}</span>
+     </li>
+     <li class="thanksMessage__list__element">
+       <span>Tournoi choisi:</span>
+       <span class="thanksMessage__list__element__answer">${formObject.location}</span>
+     </li>
+     <li class="thanksMessage__list__element thanksMessage__list__element__answer">${formObject.subscribe ?
+      "Vous souhaitez être prévenu des prochains évènements" :
+      "Vous ne souhaitez pas être prévenu des prochains évènements"}</li>
+   </ul>
+ </div>`
 
-  const answers = document.querySelectorAll('.thanksMessage__list__element__answer');
-  answers[0].textContent = formObject.firstName;
-  answers[1].textContent = formObject.lastName;
-  answers[2].textContent = formObject.email;
-  answers[3].textContent = formObject.birthdate;
-  answers[4].textContent = formObject.quantity;
-  answers[5].textContent = formObject.location;
-  answers[6].textContent = formObject.subscribe ?
-    "Vous souhaitez être prévenu des prochain évènements" :
-    "Vous ne souhaitez pas être prévenu des prochains évènements.";
+  document.querySelector(".modal-body").innerHTML += message;
 
 }
