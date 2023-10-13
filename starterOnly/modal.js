@@ -1,14 +1,8 @@
 import {
   addAndVerifyEventListener,
-  verifyName,
-  verifyEmail,
-  verifyBirthDate,
-  verifyIsNumber,
-  handleSubmitVerification,
   resetModal,
-  verifyIsLocationChecked,
-  verifyIsChecked,
   formatDate,
+  handleSubmitVerification
 } from "./formManager.js";
 
 function editNav() {
@@ -35,6 +29,7 @@ const lastName = document.getElementById("last");
 const email = document.getElementById("email");
 const birthdate = document.getElementById("birthdate");
 const quantity = document.getElementById("quantity");
+const radiosFormData = formData[5];
 const conditionsCheckbox = document.getElementById("checkbox1");
 const subscribeCheckbox = document.getElementById("checkbox2");
 
@@ -50,70 +45,47 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // close modal event
 closeModalBtn.addEventListener("click", closeModal);
 
+
 // Inputs event
 for (let i = 0; i < formData.length; i++) {
-  //Name inputs event
-  i < 2 && addAndVerifyEventListener(formData[i], verifyName, "change");
-
-  //Email input event
-  i === 2 && addAndVerifyEventListener(formData[i], verifyEmail, "change");
-
-  //Birthdate input event
-  i === 3 && addAndVerifyEventListener(formData[i], verifyBirthDate, "change");
-
-  //Tournaments quantity event
-  i === 4 && addAndVerifyEventListener(formData[i], verifyIsNumber, "input");
-
-  // Location choice
-  i === 5 && formData[i].querySelector(".errorMessage") &&
-    formData[i].removeChild(formData[i].querySelector(".errorMessage"));
-
-  // Conditions checkbox
-  i === 6 && (formData[i].querySelector("#checkbox1")).addEventListener("click", (e) => {
-    if (e.target.checked && formData[6].querySelector(".errorMessage")) {
-      formData[6].removeChild(formData[6].querySelector(".errorMessage"));
-    }
-  });
+  // Add event listener on the first input of each element
+  (i < 5 || i === 6) && addAndVerifyEventListener(formData[i].querySelector("input"));
+  // Add an event liste,er on each input of this element
+  i === 5 && formData[i].querySelectorAll("input").forEach(input => addAndVerifyEventListener(input));
 }
 
 //submit event
 form.addEventListener('submit', (e) => {
   e.preventDefault();
   let formObject = {};
+
   try {
     //Verifications and form object setting
-    handleSubmitVerification(firstName.parentNode, firstName.value, verifyName);
+    handleSubmitVerification(firstName);
     formObject.firstName = firstName.value;
 
-    handleSubmitVerification(lastName.parentElement, lastName.value, verifyName);
+    handleSubmitVerification(lastName);
     formObject.lastName = lastName.value;
 
-    handleSubmitVerification(email.parentElement, email.value, verifyEmail);
+    handleSubmitVerification(email);
     formObject.email = email.value;
 
-    handleSubmitVerification(birthdate.parentElement, birthdate.value, verifyBirthDate);
-
+    handleSubmitVerification(birthdate);
     formObject.birthdate = birthdate.value;
 
-    handleSubmitVerification(quantity.parentElement, quantity.value, verifyIsNumber);
+    handleSubmitVerification(quantity);
     formObject.quantity = quantity.value;
 
-    const selectedRadioButton = document.querySelector('input[name="location"]:checked');
-    handleSubmitVerification(formData[5], selectedRadioButton, verifyIsLocationChecked);
-    formObject.location = selectedRadioButton.value;
+    handleSubmitVerification(conditionsCheckbox);
 
-    handleSubmitVerification(conditionsCheckbox.parentElement, conditionsCheckbox.checked, verifyIsChecked);
+    handleSubmitVerification(radiosFormData);
+    formObject.location = document.querySelector('input[name="location"]:checked').value;
 
     //Subscribe
-    if (subscribeCheckbox.checked) {
-      formObject.subscribe = true
-    } else {
-      formObject.subscribe = false
-    }
+    formObject.subscribe = subscribeCheckbox.checked;
     thanksMessage(formObject);
-  } catch (error) {
+  } catch {
   }
-
 });
 
 //Functions
@@ -142,44 +114,43 @@ function closeModal() {
 /**
  * Launch thanks message
  */
-function thanksMessage(formObject) {
+function thanksMessage(data) {
+  console.log(data)
   // Form closing
   form.style.display = "none";
 
   // Add thanks message
   const message = `<div class="thanksMessage">
-   <p class="thanksMessage__title">Merci! Votre réservation bien a été reçue. </p>
-   <ul class="thanksMessage__list">
-     <li class="thanksMessage__list__element">
-       <span>Prénom:</span>
-       <span class="thanksMessage__list__element__answer">${formObject.firstName} </span>
-     </li>
-     <li class="thanksMessage__list__element">
-       <span>Nom:</span>
-       <span class="thanksMessage__list__element__answer">${formObject.lastName}</span>
-     </li>
-     <li class="thanksMessage__list__element">
-       <span>E-mail:</span>
-       <span class="thanksMessage__list__element__answer">${formObject.email} </span>
-     </li>
-     <li class="thanksMessage__list__element">
-       <span>Date de naissance:</span>
-       <span class="thanksMessage__list__element__answer">${formatDate(formObject.birthdate)}</span>
-     </li>
-     <li class="thanksMessage__list__element">
-       <span>Nombre de tournois GameOn:</span>
-       <span class="thanksMessage__list__element__answer">${formObject.quantity}</span>
-     </li>
-     <li class="thanksMessage__list__element">
-       <span>Tournoi choisi:</span>
-       <span class="thanksMessage__list__element__answer">${formObject.location}</span>
-     </li>
-     <li class="thanksMessage__list__element thanksMessage__list__element__answer">${formObject.subscribe ?
+    <p class="thanksMessage__title">Merci! Votre réservation bien a été reçue. </p>
+    <ul class="thanksMessage__list">
+      <li class="thanksMessage__list__element">
+        <span>Prénom:</span>
+        <span class="thanksMessage__list__element__answer">${data.firstName} </span>
+      </li>
+      <li class="thanksMessage__list__element">
+        <span>Nom:</span>
+        <span class="thanksMessage__list__element__answer">${data.lastName}</span>
+      </li>
+      <li class="thanksMessage__list__element">
+        <span>E-mail:</span>
+        <span class="thanksMessage__list__element__answer">${data.email} </span>
+      </li>
+      <li class="thanksMessage__list__element">
+        <span>Date de naissance:</span>
+        <span class="thanksMessage__list__element__answer">${formatDate(data.birthdate)}</span>
+      </li>
+      <li class="thanksMessage__list__element">
+        <span>Nombre de tournois GameOn:</span>
+        <span class="thanksMessage__list__element__answer">${data.quantity}</span>
+      </li>
+      <li class="thanksMessage__list__element">
+        <span>Tournoi choisi:</span>
+        <span class="thanksMessage__list__element__answer">${data.location}</span>
+      </li>
+      <li class="thanksMessage__list__element thanksMessage__list__element__answer">${data.subscribe ?
       "Vous souhaitez être prévenu des prochains évènements" :
       "Vous ne souhaitez pas être prévenu des prochains évènements"}</li>
-   </ul>
- </div>`
-
+    </ul>
+  </div>`
   document.querySelector(".modal-body").innerHTML += message;
-
 }

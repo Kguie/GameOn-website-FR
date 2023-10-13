@@ -15,16 +15,42 @@ export function displayErrorMessage(element, error) {
 /**
  * Handle change Verification
  */
-export function addAndVerifyEventListener(element, verificationFunction, eventType) {
+export function addAndVerifyEventListener(element) {
+    const eventType =
+        (element.id === "checkbox1" || element.id.includes("location")) ?
+            "change" : (element.id === "quantity" ?
+                "input" : "change")
     element.addEventListener(eventType, (e) => {
-        const errorElement = element.querySelector(".errorMessage");
+        const errorElement = e.target.parentElement.querySelector(".errorMessage");
         try {
-            verificationFunction(e.target.value);
+            switch (element.id) {
+                case "first":
+                    verifyName(e.target);
+                    break;
+                case "last":
+                    verifyName(e.target);
+                    break;
+                case "email":
+                    verifyEmail(e.target);
+                    break;
+                case "birthdate":
+                    verifyBirthDate(e.target);
+                    break;
+                case "quantity":
+                    verifyIsNumber(e.target);
+                    break;
+                case "checkbox1":
+                    verifyIsChecked(e.target);
+                    break;
+                default:
+                    break;
+            }
+            // Erase error message
             if (errorElement) {
-                element.removeChild(errorElement);
+                e.target.parentElement.removeChild(errorElement);
             }
         } catch (error) {
-            displayErrorMessage(element, error);
+            displayErrorMessage(e.target.parentElement, error);
         }
     });
 }
@@ -32,15 +58,44 @@ export function addAndVerifyEventListener(element, verificationFunction, eventTy
 /**
  * Handle element verification before submit
  */
-export function handleSubmitVerification(element, value, verificationFunction) {
-    const errorElement = element.querySelector(".errorMessage");
+export function handleSubmitVerification(element) {
+    const errorElement = element.parentElement.querySelector(".errorMessage");
     try {
-        verificationFunction(value);
-        if (errorElement) {
-            element.removeChild(errorElement);
+        switch (element.id) {
+            case "first":
+                verifyName(element);
+                break;
+            case "last":
+                verifyName(element);
+                break;
+            case "email":
+                verifyEmail(element);
+                break;
+            case "birthdate":
+                verifyBirthDate(element);
+                break;
+            case "quantity":
+                verifyIsNumber(element);
+                break;
+            case "checkbox1":
+                verifyIsChecked(element);
+                break;
+            default:
+                verifyIsLocationChecked(element);
+                break;
         }
+        // Erase error message
+        if (errorElement) {
+            element.parentElement.removeChild(errorElement);
+        }
+
     } catch (error) {
-        displayErrorMessage(element, error);
+        //Radios formData
+        if (!element.id) {
+            displayErrorMessage(element, error);
+        } else {
+            displayErrorMessage(element.parentElement, error);
+        }
         throw new Error();
     }
 }
@@ -84,19 +139,20 @@ export function formatDate(date) {
 /**
  * Verify the form name inputs
  */
-export function verifyName(name) {
-    if ((name.trim()).length < 2) {
-        throw new Error("Veuillez entrer 2 caractères ou plus pour les champs du nom.");
+export function verifyName(element) {
+    const nameType = element.id === "first" ? "prénom" : "nom"
+    if ((element.value.trim()).length < 2) {
+        throw new Error(`Veuillez entrer 2 caractères ou plus pour le champ du ${nameType}.`);
     }
 }
 
 /***
  * Verify email 
  */
-export function verifyEmail(email) {
+export function verifyEmail(element) {
     // Email regex
     const emailRegex = /^[a-z0-9._-]+@[a-z0-9._-]+\.[a-z0-9._-]+/gi;
-    const emailTest = emailRegex.test(email.trim());
+    const emailTest = emailRegex.test(element.value.trim());
     if (!emailTest) {
         throw new Error("Veuillez entrer une adresse e-mail valide.")
     }
@@ -105,16 +161,16 @@ export function verifyEmail(email) {
 /***
  * Verify birthDate 
  */
-export function verifyBirthDate(birthDate) {
+export function verifyBirthDate(element) {
     // birthDate regex
     const birthDateRegex = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/gi;
-    const birthDateTest = birthDateRegex.test(birthDate.trim());
+    const birthDateTest = birthDateRegex.test(element.value.trim());
     const errorMessage = "Veuillez entrer une date de naissance valide";
     if (!birthDateTest) {
         throw new Error(errorMessage);
     }
     // Birth year test
-    const birthYear = birthDate.trim().slice(0, 4);
+    const birthYear = element.value.trim().slice(0, 4);
     const today = new Date();
     if (birthYear < 1900 || birthYear > today.getFullYear()) {
         throw new Error(errorMessage);
@@ -124,8 +180,8 @@ export function verifyBirthDate(birthDate) {
 /***
  * Verify if the argument is a number
  */
-export function verifyIsNumber(number) {
-    const quantity = parseInt(number)
+export function verifyIsNumber(element) {
+    const quantity = parseInt(element.value)
     // isNumber regex
     const isNumberRegex = /^[0-9]+$/g;
     const isNumberTest = isNumberRegex.test(quantity);
@@ -135,20 +191,29 @@ export function verifyIsNumber(number) {
 }
 
 /**
- * Verify if one the radio option is checked 
+ * Verify if one the radio option is checked during the submit and handle error message
  */
-export function verifyIsLocationChecked(radio) {
-    if (!radio) {
+export function verifyIsLocationChecked(formData) {
+    const elementArray = Array.from(formData.querySelectorAll("input"));
+    const errorElement = formData.querySelector(".errorMessage");
+    const elementChoosen = elementArray.find(element => element.checked);
+    if (!elementChoosen) {
         throw new Error("Vous devez choisir une option.");
+    } else {
+        // Erase error message
+        if (errorElement) {
+            formData.removeChild(errorElement);
+        }
     }
 }
 
 /**
  * Verify if the conditions checkbox is checked
  */
-export function verifyIsChecked(value) {
-    if (!value) {
+export function verifyIsChecked(element) {
+    if (!element.checked) {
         throw new Error("Veuillez confirmer que vous avez lu et accepté les conditions d'utilisation.");
     }
+
 }
 
