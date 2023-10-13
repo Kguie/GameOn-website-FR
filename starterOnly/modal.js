@@ -115,7 +115,6 @@ function closeModal() {
  * Launch thanks message
  */
 function thanksMessage(data) {
-  console.log(data)
   // Form closing
   form.style.display = "none";
 
