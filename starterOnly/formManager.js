@@ -16,10 +16,7 @@ export function displayErrorMessage(element, error) {
  * Handle change Verification
  */
 export function addAndVerifyEventListener(element) {
-    const eventType =
-        (element.id === "checkbox1" || element.id.includes("location")) ?
-            "change" : (element.id === "quantity" ?
-                "input" : "change")
+    const eventType = element.id === "quantity" ? "input" : "change"
     element.addEventListener(eventType, (e) => {
         const errorElement = e.target.parentElement.querySelector(".errorMessage");
         try {
@@ -166,13 +163,10 @@ export function verifyBirthDate(element) {
     const birthDateRegex = /^[0-9]{4}-[0-9]{2}-[0-9]{2}$/gi;
     const birthDateTest = birthDateRegex.test(element.value.trim());
     const errorMessage = "Veuillez entrer une date de naissance valide";
-    if (!birthDateTest) {
-        throw new Error(errorMessage);
-    }
     // Birth year test
     const birthYear = element.value.trim().slice(0, 4);
     const today = new Date();
-    if (birthYear < 1900 || birthYear > today.getFullYear()) {
+    if (birthYear < 1900 || birthYear > today.getFullYear() || !birthDateTest) {
         throw new Error(errorMessage);
     }
 }
