@@ -2,7 +2,7 @@ import {
   addAndVerifyEventListener,
   resetModal,
   formatDate,
-  handleSubmitVerification
+  handleSubmitVerification,
 } from "./formManager.js";
 
 function editNav() {
@@ -20,9 +20,9 @@ const heroSection = document.querySelector(".hero-section");
 const modalbg = document.querySelector(".bground");
 const modalBtn = document.querySelectorAll(".modal-btn");
 const closeModalBtn = document.querySelector(".close");
-const menuBtn = document.querySelector(".icon")
+const menuBtn = document.querySelector(".icon");
 
-const form = document.querySelector("form")
+const form = document.querySelector("form");
 const formData = document.querySelectorAll(".formData");
 const firstName = document.getElementById("first");
 const lastName = document.getElementById("last");
@@ -45,17 +45,20 @@ modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // close modal event
 closeModalBtn.addEventListener("click", closeModal);
 
-
 // Inputs event
 for (let i = 0; i < formData.length; i++) {
   // Add event listener on the first input of each element
-  (i < 5 || i === 6) && addAndVerifyEventListener(formData[i].querySelector("input"));
+  (i < 5 || i === 6) &&
+    addAndVerifyEventListener(formData[i].querySelector("input"));
   // Add an event liste,er on each input of this element
-  i === 5 && formData[i].querySelectorAll("input").forEach(input => addAndVerifyEventListener(input));
+  i === 5 &&
+    formData[i]
+      .querySelectorAll("input")
+      .forEach((input) => addAndVerifyEventListener(input));
 }
 
 //submit event
-form.addEventListener('submit', (e) => {
+form.addEventListener("submit", (e) => {
   e.preventDefault();
   let formObject = {};
 
@@ -79,13 +82,14 @@ form.addEventListener('submit', (e) => {
     handleSubmitVerification(conditionsCheckbox);
 
     handleSubmitVerification(radiosFormData);
-    formObject.location = document.querySelector('input[name="location"]:checked').value;
+    formObject.location = document.querySelector(
+      'input[name="location"]:checked'
+    ).value;
 
     //Subscribe
     formObject.subscribe = subscribeCheckbox.checked;
     thanksMessage(formObject);
-  } catch {
-  }
+  } catch {}
 });
 
 //Functions
@@ -124,11 +128,15 @@ function thanksMessage(data) {
     <ul class="thanksMessage__list">
       <li class="thanksMessage__list__element">
         <span>Prénom:</span>
-        <span class="thanksMessage__list__element__answer">${data.firstName} </span>
+        <span class="thanksMessage__list__element__answer">${
+          data.firstName
+        } </span>
       </li>
       <li class="thanksMessage__list__element">
         <span>Nom:</span>
-        <span class="thanksMessage__list__element__answer">${data.lastName}</span>
+        <span class="thanksMessage__list__element__answer">${
+          data.lastName
+        }</span>
       </li>
       <li class="thanksMessage__list__element">
         <span>E-mail:</span>
@@ -136,20 +144,28 @@ function thanksMessage(data) {
       </li>
       <li class="thanksMessage__list__element">
         <span>Date de naissance:</span>
-        <span class="thanksMessage__list__element__answer">${formatDate(data.birthdate)}</span>
+        <span class="thanksMessage__list__element__answer">${formatDate(
+          data.birthdate
+        )}</span>
       </li>
       <li class="thanksMessage__list__element">
         <span>Nombre de tournois GameOn:</span>
-        <span class="thanksMessage__list__element__answer">${data.quantity}</span>
+        <span class="thanksMessage__list__element__answer">${
+          data.quantity
+        }</span>
       </li>
       <li class="thanksMessage__list__element">
         <span>Tournoi choisi:</span>
-        <span class="thanksMessage__list__element__answer">${data.location}</span>
+        <span class="thanksMessage__list__element__answer">${
+          data.location
+        }</span>
       </li>
-      <li class="thanksMessage__list__element thanksMessage__list__element__answer">${data.subscribe ?
-      "Vous souhaitez être prévenu des prochains évènements" :
-      "Vous ne souhaitez pas être prévenu des prochains évènements"}</li>
+      <li class="thanksMessage__list__element thanksMessage__list__element__answer">${
+        data.subscribe
+          ? "Vous souhaitez être prévenu des prochains évènements"
+          : "Vous ne souhaitez pas être prévenu des prochains évènements"
+      }</li>
     </ul>
-  </div>`
+  </div>`;
   document.querySelector(".modal-body").innerHTML += message;
 }
