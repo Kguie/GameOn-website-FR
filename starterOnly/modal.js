@@ -99,6 +99,7 @@ form.addEventListener("submit", (e) => {
  */
 function launchModal() {
   modalbg.style.display = "block";
+
   // Fix scrolling error, form and errors reset
   heroSection.style.overflow = "hidden";
   heroSection.style.position = "fixed";
@@ -166,6 +167,11 @@ function thanksMessage(data) {
           : "Vous ne souhaitez pas être prévenu des prochains évènements"
       }</li>
     </ul>
+    <button
+      class="btn-close"
+    >Fermer</button>
   </div>`;
   document.querySelector(".modal-body").innerHTML += message;
+  // Add close modal function on the close button
+  document.querySelector(".btn-close")?.addEventListener("click", closeModal);
 }

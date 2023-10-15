@@ -8,6 +8,16 @@ export function displayErrorMessage(element, error) {
     messageElement.textContent = error.message;
     messageElement.classList.add("errorMessage");
     element.appendChild(messageElement);
+    // Red border add
+    const input = element.querySelector("input");
+    const conditionsCheckbox = document.querySelectorAll(".checkbox-icon")[6];
+    if (input.id) {
+      if (input.id === "checkbox1") {
+        conditionsCheckbox.style.border = "2px solid #fe142f";
+      } else {
+        input.style.border = "2px solid #fe142f";
+      }
+    }
   }
   element.scrollIntoView({ behavior: "smooth" });
 }
@@ -45,6 +55,13 @@ export function addAndVerifyEventListener(element) {
       // Erase error message
       if (errorElement) {
         e.target.parentElement.removeChild(errorElement);
+        if (e.target.id === "checkbox1") {
+          const conditionsCheckbox =
+            document.querySelectorAll(".checkbox-icon")[6];
+          conditionsCheckbox.style.border = "none";
+        } else {
+          e.target.style.border = "none";
+        }
       }
     } catch (error) {
       displayErrorMessage(e.target.parentElement, error);
@@ -81,9 +98,16 @@ export function handleSubmitVerification(element) {
         verifyIsLocationChecked(element);
         break;
     }
-    // Erase error message
+    // Erase error message and red color
     if (errorElement) {
       element.parentElement.removeChild(errorElement);
+      if (element.id === "checkbox1") {
+        const conditionsCheckbox =
+          document.querySelectorAll(".checkbox-icon")[6];
+        conditionsCheckbox.style.border = "none";
+      } else {
+        element.style.border = "none";
+      }
     }
   } catch (error) {
     //Radios formData
