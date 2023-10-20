@@ -126,6 +126,7 @@ export function handleSubmitVerification(element) {
 export function resetModal() {
   const errors = document.querySelectorAll(".errorMessage");
   const form = document.querySelector("form");
+  const thanksMessage = document.querySelector(".thanksMessage");
 
   //Remove error messages and red border
   if (errors.length > 0) {
@@ -136,10 +137,16 @@ export function resetModal() {
     });
     const conditionsCheckbox = document.querySelectorAll(".checkbox-icon")[6];
     conditionsCheckbox.style.border = "none";
+    // reset checkbox 1 and 2 values
     document.getElementById("checkbox1").value = true;
+    document.getElementById("checkbox2").value = false;
   }
 
-  //If thanks Message launch reload
+  //Reme thanksMessage
+  if (thanksMessage) {
+    thanksMessage.parentElement.removeChild(thanksMessage);
+    form.style.display = "block";
+  }
 
   form.reset();
 }

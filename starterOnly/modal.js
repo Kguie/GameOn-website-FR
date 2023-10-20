@@ -22,18 +22,6 @@ const modalBtn = document.querySelectorAll(".modal-btn");
 const closeModalBtn = document.querySelector(".close");
 const menuBtn = document.querySelector(".icon");
 
-const form = document.querySelector("form");
-const formData = document.querySelectorAll(".formData");
-const firstName = document.getElementById("first");
-const lastName = document.getElementById("last");
-const email = document.getElementById("email");
-const birthdate = document.getElementById("birthdate");
-const quantity = document.getElementById("quantity");
-const radiosFormData = formData[5];
-const conditionsCheckbox = document.getElementById("checkbox1");
-const subscribeCheckbox = document.getElementById("checkbox2");
-const message = document.querySelector(".thanksMessage");
-
 //Events
 
 //Manage responsive menu
@@ -45,53 +33,6 @@ menuBtn.addEventListener("click", () => {
 modalBtn.forEach((btn) => btn.addEventListener("click", launchModal));
 // close modal event
 closeModalBtn.addEventListener("click", closeModal);
-
-// Inputs event
-for (let i = 0; i < formData.length; i++) {
-  // Add event listener on the first input of each element
-  (i < 5 || i === 6) &&
-    addAndVerifyEventListener(formData[i].querySelector("input"));
-  // Add an event liste,er on each input of this element
-  i === 5 &&
-    formData[i]
-      .querySelectorAll("input")
-      .forEach((input) => addAndVerifyEventListener(input));
-}
-
-//submit event
-form.addEventListener("submit", (e) => {
-  e.preventDefault();
-  let formObject = {};
-
-  try {
-    //Verifications and form object setting
-    handleSubmitVerification(firstName);
-    formObject.firstName = firstName.value;
-
-    handleSubmitVerification(lastName);
-    formObject.lastName = lastName.value;
-
-    handleSubmitVerification(email);
-    formObject.email = email.value;
-
-    handleSubmitVerification(birthdate);
-    formObject.birthdate = birthdate.value;
-
-    handleSubmitVerification(quantity);
-    formObject.quantity = quantity.value;
-
-    handleSubmitVerification(conditionsCheckbox);
-
-    handleSubmitVerification(radiosFormData);
-    formObject.location = document.querySelector(
-      'input[name="location"]:checked'
-    ).value;
-
-    //Subscribe
-    formObject.subscribe = subscribeCheckbox.checked;
-    thanksMessage(formObject);
-  } catch {}
-});
 
 //Functions
 
@@ -105,27 +46,27 @@ function launchModal() {
   heroSection.style.overflow = "hidden";
   heroSection.style.position = "fixed";
   resetModal();
+  const form = document.querySelector("form");
+  handleAddChangeEventListner();
+  handleAddSubmitEventListener(form);
 }
 
 /**
  * Close modal
  */
 function closeModal() {
-  // Reload if thanks message
-  if (document.querySelector(".thanksMessage")) {
-    location.reload();
-  } else {
-    modalbg.style.display = "none";
-    // Fix scrolling error
-    heroSection.style.overflow = "auto";
-    heroSection.style.position = "inherit";
-  }
+  modalbg.style.display = "none";
+  // Fix scrolling error
+  heroSection.style.overflow = "auto";
+  heroSection.style.position = "inherit";
 }
 
 /**
  * Launch thanks message
  */
 function thanksMessage(data) {
+  const form = document.querySelector("form");
+
   // Form closing
   form.style.display = "none";
 
@@ -180,4 +121,71 @@ function thanksMessage(data) {
   document.querySelector(".modal-body").innerHTML += message;
   // Add close modal function on the close button
   document.querySelector(".btn-close")?.addEventListener("click", closeModal);
+}
+
+/**
+ * Add change type event listener on differents inputs
+ */
+function handleAddChangeEventListner() {
+  const formData = document.querySelectorAll(".formData");
+  // Inputs event
+  for (let i = 0; i < formData.length; i++) {
+    // Add event listener on the first input of each element
+    (i < 5 || i === 6) &&
+      addAndVerifyEventListener(formData[i].querySelector("input"));
+    // Add an event liste,er on each input of this element
+    i === 5 &&
+      formData[i]
+        .querySelectorAll("input")
+        .forEach((input) => addAndVerifyEventListener(input));
+  }
+}
+
+/**
+ * Add the event listener on submit
+ */
+function handleAddSubmitEventListener(element) {
+  const formData = document.querySelectorAll(".formData");
+  const firstName = document.getElementById("first");
+  const lastName = document.getElementById("last");
+  const email = document.getElementById("email");
+  const birthdate = document.getElementById("birthdate");
+  const quantity = document.getElementById("quantity");
+  const radiosFormData = formData[5];
+  const conditionsCheckbox = document.getElementById("checkbox1");
+  const subscribeCheckbox = document.getElementById("checkbox2");
+  //submit event
+  element.addEventListener("submit", (e) => {
+    e.preventDefault();
+    let formObject = {};
+
+    try {
+      //Verifications and form object setting
+      handleSubmitVerification(firstName);
+      formObject.firstName = firstName.value;
+
+      handleSubmitVerification(lastName);
+      formObject.lastName = lastName.value;
+
+      handleSubmitVerification(email);
+      formObject.email = email.value;
+
+      handleSubmitVerification(birthdate);
+      formObject.birthdate = birthdate.value;
+
+      handleSubmitVerification(quantity);
+      formObject.quantity = quantity.value;
+
+      handleSubmitVerification(conditionsCheckbox);
+
+      handleSubmitVerification(radiosFormData);
+      formObject.location = document.querySelector(
+        'input[name="location"]:checked'
+      ).value;
+
+      //Subscribe
+      formObject.subscribe = subscribeCheckbox.checked;
+      thanksMessage(formObject);
+    } catch {}
+  });
 }
