@@ -139,8 +139,6 @@ export function resetModal() {
     document.getElementById("checkbox1").value = true;
   }
 
-  //If thanks Message launch reload
-
   form.reset();
 }
 
