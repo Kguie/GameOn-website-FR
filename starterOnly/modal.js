@@ -32,6 +32,7 @@ const quantity = document.getElementById("quantity");
 const radiosFormData = formData[5];
 const conditionsCheckbox = document.getElementById("checkbox1");
 const subscribeCheckbox = document.getElementById("checkbox2");
+const message = document.querySelector(".thanksMessage");
 
 //Events
 
@@ -110,10 +111,15 @@ function launchModal() {
  * Close modal
  */
 function closeModal() {
-  modalbg.style.display = "none";
-  // Fix scrolling error
-  heroSection.style.overflow = "auto";
-  heroSection.style.position = "inherit";
+  // Reload if thanks message
+  if (document.querySelector(".thanksMessage")) {
+    location.reload();
+  } else {
+    modalbg.style.display = "none";
+    // Fix scrolling error
+    heroSection.style.overflow = "auto";
+    heroSection.style.position = "inherit";
+  }
 }
 
 /**

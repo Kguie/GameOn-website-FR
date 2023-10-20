@@ -125,21 +125,22 @@ export function handleSubmitVerification(element) {
  */
 export function resetModal() {
   const errors = document.querySelectorAll(".errorMessage");
-  const thanksMessage = document.querySelector(".thanksMessage");
   const form = document.querySelector("form");
 
-  //Remove error messages
+  //Remove error messages and red border
   if (errors.length > 0) {
     errors.forEach((message) => {
+      const input = message.parentElement.querySelector("input");
       message.parentElement.removeChild(message);
+      input.style.border = "none";
     });
+    const conditionsCheckbox = document.querySelectorAll(".checkbox-icon")[6];
+    conditionsCheckbox.style.border = "none";
+    document.getElementById("checkbox1").value = true;
   }
 
-  //Remove thanks message and turn on the form
-  if (thanksMessage) {
-    thanksMessage.parentElement.removeChild(thanksMessage);
-    form.style.display = "block";
-  }
+  //If thanks Message launch reload
+
   form.reset();
 }
 
